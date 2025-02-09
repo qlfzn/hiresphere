@@ -10,7 +10,7 @@ import Card from './Card.vue';
           <Card bg="bg-gray-50">
             <h2 class="text-2xl font-bold">For Freelancers</h2>
             <p class="mt-2 mb-4">
-              Browse our Vue jobs and start your career today
+              Browse jobs and start your career today
             </p>
             <a
               href="jobs.html"
@@ -26,7 +26,7 @@ import Card from './Card.vue';
             </p>
             <a
               href="add-job.html"
-              class="inline-block bg-green-500 text-white rounded-lg px-4 py-2 hover:bg-green-600"
+              class="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
             >
               Add Project 
             </a>

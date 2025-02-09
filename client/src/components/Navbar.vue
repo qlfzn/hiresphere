@@ -1,6 +1,6 @@
 <script setup>
 import logo from '@/assets/logo.svg';
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 
 const navTitle = ref("HireSphere");
 
@@ -10,6 +10,13 @@ const navigation = [
   { name: 'Profile', href: '#' },
   { name: 'Help', href: '#' },
 ]
+
+defineProps({
+    hover: {
+        type: String,
+        default: ""
+    }
+})
 
 </script>
 
