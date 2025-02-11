@@ -5,10 +5,9 @@ import { ref, defineProps } from 'vue'
 const navTitle = ref("HireSphere");
 
 const navigation = [
-  { name: 'Project', href: '#' },
-  { name: 'Dashboard', href: '#' },
-  { name: 'Profile', href: '#' },
-  { name: 'Help', href: '#' },
+  { name: 'dashboard', display: 'Dashboard', href: '#' },
+  { name: 'project', display: 'Project', href: '#' },
+  { name: 'profile', display: 'Profile', href: '#' }
 ]
 
 defineProps({
@@ -38,7 +37,7 @@ defineProps({
               <div class="flex space-x-2">
                 <a
                   href="index.html"
-                  class="text-white bg-[#16235b] hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
+                  class="text-white hover:bg-[#16235b] hover:text-white rounded-md px-3 py-2"
                   >Dashboard</a
                 >
                 <a
