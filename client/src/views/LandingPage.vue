@@ -1,0 +1,9 @@
+<script setup>
+import Title from '@/components/Title.vue';
+
+</script>
+
+
+<template>
+    <Title title="HireSphere" subtitle="Let AI do the work – match with the best talent instantly."/>
+</template>
