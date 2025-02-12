@@ -20,6 +20,10 @@ const routeToHomePage = () => {
     router.push('/home');
 }
 
+const routeToAuthPage = () => {
+    router.push('/auth');
+}
+
 </script>
 
 
@@ -45,7 +49,8 @@ const routeToHomePage = () => {
 
                 <!-- Log in Button -->
                 <button class="flex items-center px-6 py-3 border border-gray-300 text-white 
-                               rounded-full shadow-md hover:bg-white hover:text-[#16235b] transition">
+                               rounded-full shadow-md hover:bg-white hover:text-[#16235b] transition"
+                               @click="routeToAuthPage">
                     Log in
                     <ArrowRight class="ml-2" />
                 </button>
