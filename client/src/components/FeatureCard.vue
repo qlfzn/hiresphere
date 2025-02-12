@@ -28,10 +28,10 @@ const features = [
         <div
           v-for="feature in features"
           :key="feature.title"
-          class="p-6 bg-white outline outline-[#16235b] rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1"
+          class="group p-6 bg-white outline outline-[#16235b] rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1"
         >
           <div class="text-5xl">{{ feature.icon }}</div>
-          <h3 class="mt-4 text-xl font-semibold text-[#16235b]">{{ feature.title }}</h3>
+          <h3 class="mt-4 text-xl font-semibold text-[#16235b] group-hover:text-[#63b7ff]">{{ feature.title }}</h3>
           <p class="text-gray-600 mt-2">{{ feature.description }}</p>
         </div>
       </div>

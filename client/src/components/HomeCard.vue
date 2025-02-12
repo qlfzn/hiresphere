@@ -1,14 +1,33 @@
 <script setup>
-import TitleCard from './FeatureCard.vue';
+import Card from './Card.vue';
+import { defineProps } from 'vue';
 
+defineProps({
+  cardTitle: {
+    type: String, 
+    default: "Card title here"
+  },
+  cardSubtitle: {
+    type: String, 
+    default: "Card subtitle here"
+  },
+  buttonText: {
+    type: String, 
+    default: "Click here"
+  }
+}) 
 </script>
 
 <template>
-    <section class="py-4">
-      <div class="container-xl lg:container m-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg">
-          <TitleCard cardTitle="AI Generated" cardDescription="This is the description for the 1st card"/> 
-        </div>
-      </div>
-    </section>
+    <Card class="bg-gray-100">
+      <h2 class="text-2xl font-bold">{{ cardTitle }}</h2>
+      <p class="mt-2 mb-4">
+        {{ cardSubtitle }}
+      </p>
+      <a
+        class="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+      >
+        {{ buttonText }}
+      </a>
+    </Card>
 </template>

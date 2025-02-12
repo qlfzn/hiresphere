@@ -1,6 +1,5 @@
 <script setup>
 import FeatureCard from '@/components/FeatureCard.vue';
-import HomeCard from '@/components/HomeCard.vue';
 import Title from '@/components/Title.vue';
 
 </script>

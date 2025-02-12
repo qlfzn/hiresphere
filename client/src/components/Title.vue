@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps } from 'vue';
 import { ArrowRight } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
 
 defineProps({
     title: {
@@ -13,11 +14,17 @@ defineProps({
     }
 })
 
+const router = useRouter();
+
+const routeToHomePage = () => {
+    router.push('/home');
+}
+
 </script>
 
 
 <template>
-    <section class="relative text-center py-24 bg-gradient-to-b from-[#2B4570] from-15% via-[#16235b] via-85% to-white ">
+    <section class="relative text-center py-24 bg-gradient-to-b from-[#16235b] via-[#2b4570] via-80% via-[#6eb7ff] via-20% to-white">
 
         <div class="relative container mx-auto px-6">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-wide 
@@ -31,7 +38,8 @@ defineProps({
             <div class="mt-6 flex justify-center space-x-4">
                 <!-- Get Started Button -->
                 <button class="px-6 py-3 bg-[#6eb7ff] text-[#16235b] font-semibold rounded-full 
-                               shadow-lg hover:bg-[#2B4570] hover:text-white transition">
+                               shadow-lg hover:bg-[#2B4570] hover:text-white transition"
+                               @click="routeToHomePage">
                     Get Started
                 </button>
 
