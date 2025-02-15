@@ -2,10 +2,17 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 import Project from "@/views/Project.vue";
 import CreateProject from "@/views/CreateProject.vue";
+import LandingPage from "@/views/LandingPage.vue";
+import Auth from "@/views/Auth.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        {
+            path: '/',
+            name: 'landing',
+            component: LandingPage
+        },
         {
             path: '/home',
             name: 'home',
@@ -20,6 +27,11 @@ const router = createRouter({
             path: '/create-project',
             name: 'create-project',
             component: CreateProject 
+        },
+        {
+            path: '/auth',
+            name: 'auth',
+            component: Auth
         }
     ]
 });
