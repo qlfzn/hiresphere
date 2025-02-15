@@ -1,5 +1,5 @@
 <script setup>
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/hs-no-text.svg';
 import { ref, defineProps } from 'vue'
 
 const navTitle = ref("HireSphere");
@@ -28,7 +28,7 @@ defineProps({
           >
             <!-- Logo -->
             <a class="flex flex-shrink-0 items-center mr-4" href="index.html">
-              <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" />
+              <img class="h-10 w-auto" :src="logo" alt="HireSphere" />
               <span class="hidden md:block text-white text-2xl font-bold ml-2"
                 >{{ navTitle }}</span
               >

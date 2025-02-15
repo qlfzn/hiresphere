@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import logo from '../assets/hs-text.svg'
 
 const isLogin = ref(true); // Toggle between Sign In and Sign Up
 </script>
@@ -101,39 +102,13 @@ const isLogin = ref(true); // Toggle between Sign In and Sign Up
             {{ isLogin ? "Sign In" : "Create Account" }}
           </button>
         </form>
-
-        <!-- TODO: put real elements for social login -->
-        <!-- Social Login -->
-        <div class="text-center text-gray-500 text-sm mt-4">Or continue with</div>
-        <div class="flex justify-center space-x-4 mt-3">
-          <button class="border border-gray-300 p-2 rounded-md w-10 h-10 flex justify-center items-center">
-            <img src="@/assets/logo.svg" alt="Google" class="w-5" />
-          </button>
-          <button class="border border-gray-300 p-2 rounded-md w-10 h-10 flex justify-center items-center">
-            <img src="@/assets/logo.svg" alt="Facebook" class="w-5" />
-          </button>
-          <button class="border border-gray-300 p-2 rounded-md w-10 h-10 flex justify-center items-center">
-            <img src="@/assets/logo.svg" alt="Apple" class="w-5" />
-          </button>
-        </div>
       </div>
     </div>
 
     <!-- Right Side: Branding Section -->
-    <div class="w-1/2 bg-blue-600 flex flex-col justify-center items-center text-white text-center p-10">
+    <div class="w-1/2 bg-blue-300 flex flex-col justify-center items-center text-white text-center p-10">
       <div class="max-w-md">
-        <span class="text-blue-300 text-xl">❝</span>
-        <h1 class="text-5xl font-bold">Make a Dream.</h1>
-        <p class="mt-4 text-sm text-blue-200">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna."
-        </p>
-        <div class="mt-6 flex items-center justify-center space-x-3">
-          <img src="@/assets/logo.svg" alt="User" class="w-12 h-12 rounded-full border-2 border-white" />
-          <div>
-            <p class="font-semibold">Waleed Lozano</p>
-            <p class="text-xs text-blue-300">Product Designer</p>
-          </div>
-        </div>
+        <img class="h-auto w-auto" :src=logo alt="">
       </div>
     </div>
   </div>
