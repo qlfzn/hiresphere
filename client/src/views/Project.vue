@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar.vue';
 import ProjectCard from '@/components/ProjectCard.vue';
 import { ref } from 'vue';
+import { useRouter, RouterLink } from 'vue-router';
 
 const projectData = ref({
     activeProjects: [
@@ -10,6 +11,12 @@ const projectData = ref({
         {id: 125, title: "Project 123", description: "project description is put here", status: "active"},
     ] 
 });
+
+const router = useRouter();
+
+const routeToCreateProject = () => {
+    router.push('/new-project');
+}
 </script>
 
 <template>
@@ -24,7 +31,8 @@ const projectData = ref({
             </div>
             <button class="mr-2 bg-white text-black px-4 py-2 rounded-md shadow-lg outline outline-black
                            hover:bg-[#16235b] hover:text-white focus:ring-2 focus:ring-blue-400 
-                           active:bg-blue-800 transition">
+                           active:bg-blue-800 transition"
+                           @click.prevent="routeToCreateProject">
                New Project 
             </button>
         </div>

@@ -1,21 +1,16 @@
 <script setup>
 import logo from '@/assets/hs-no-text.svg';
 import { ref, defineProps } from 'vue'
+import { RouterLink } from 'vue-router';
 
 const navTitle = ref("HireSphere");
-
-const navigation = [
-  { name: 'dashboard', display: 'Dashboard', href: '#' },
-  { name: 'project', display: 'Project', href: '#' },
-  { name: 'profile', display: 'Profile', href: '#' }
-]
 
 defineProps({
     hover: {
         type: String,
         default: ""
     }
-})
+});
 
 </script>
 
@@ -40,11 +35,10 @@ defineProps({
                   class="text-white hover:bg-[#16235b] hover:text-white rounded-md px-3 py-2"
                   >Dashboard</a
                 >
-                <a
-                  href="jobs.html"
+                <RouterLink
+                  to="/projects"
                   class="text-white hover:bg-[#16235b] hover:text-white rounded-md px-3 py-2"
-                  >Project</a
-                >
+                  >Project </RouterLink>
                 <a
                   href="add-job.html"
                   class="text-white hover:bg-[#16235b] hover:text-white rounded-md px-3 py-2"
