@@ -36,7 +36,7 @@ const routeToAuthPage = () => {
                 Skip <span class="bg-[#6eb7ff] text-[#16235b] px-2 rounded-md">the Hassle</span>
                 <br> Hire the Best in <span class="underline decoration-4">no time</span>
             </h1>
-            <p class="text-lg sm:text-xl text-gray-300 mt-3">{{ subtitle }}</p>
+            <p class="text-lg sm:text-xl text-gray-200 mt-3">{{ subtitle }}</p>
 
             <!-- Call-to-action buttons -->
             <div class="mt-6 flex justify-center space-x-4">

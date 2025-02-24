@@ -19,7 +19,7 @@ const features = [
 </script>
 
 <template>
-  <section class="py-12 ">
+  <section class="py-12">
     <div class="container mx-auto max-w-6xl text-center">
       <h2 class="text-4xl font-extrabold text-black">Why Choose HireSphere?</h2>
       <p class="text-lg text-gray-500 mt-2">Unlock the future of hiring with our smart platform.</p>
