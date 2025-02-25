@@ -7,26 +7,16 @@ defineProps({
 </script>
 
 <template>
-    <div class="group flex justify-between items-center p-4 border rounded-lg shadow-sm transition 
-                bg-white hover:bg-[#2B4570] hover:shadow-lg">
-        <!-- Left Section: Title & Description -->
-        <div>
-            <h2 class="text-xl font-semibold text-gray-900 group-hover:text-white">
-                {{ project.title }}
-            </h2>
-            <p class="text-gray-600 group-hover:text-gray-300">
-                {{ project.description }}
-            </p>
+    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col gap-4 border border-gray-200">
+        <h2 class="text-2xl font-semibold text-[#16235b]">{{ project.title }}</h2>
+        <p class="text-gray-600">{{ project.description }}</p>
+        <div class="flex justify-between items-center mt-auto">
+            <span class="px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-md">
+                {{ project.status }}
+            </span>
+            <button class="bg-[#2b4570] text-white px-4 py-2 rounded-md shadow-md hover:bg-[#6eb7ff] transition">
+                View Details
+            </button>
         </div>
-
-        <!-- Right Section: Status -->
-        <p class="text-sm font-medium px-3 py-1 rounded-md"
-           :class="{
-               'text-green-600 text-bold': project.status === 'active',
-               'text-gray-600': project.status === 'Inactive',
-               'text-red-600': project.status === 'Archived'
-           }">
-            {{ project.status }}
-        </p>
     </div>
 </template>

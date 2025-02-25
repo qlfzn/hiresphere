@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar.vue';
 import { ref, computed } from 'vue';
 import { X } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
 
 const step = ref(1);
 
@@ -78,6 +79,12 @@ const handleModeChange = (event) => {
     preferences.value.mode = event.target.value;
 }
 
+const router = useRouter();
+
+const submitFormValues = () => {
+    router.push('/projects/:id/matches')
+
+}
 </script>
 
 <template>
@@ -90,10 +97,10 @@ const handleModeChange = (event) => {
             <div>
                 <h2 class="text-lg font-semibold mb-8 mt-22">Create New Project</h2>
                 <nav class="space-y-2">
-                    <p :class="['text-gray-900 font-medium', step === 1 ? '' : 'text-gray-300']">Project Details</p>
-                    <p :class="['text-gray-900 font-medium', step === 2 ? '' : 'text-gray-300']">Role & Skills Requirements</p>
-                    <p :class="['text-gray-900 font-medium', step === 3 ? '' : 'text-gray-300']">Job Preferences</p>
-                    <p :class="['text-gray-900 font-medium', step === 4 ? '' : 'text-gray-300']">Submission</p>
+                    <p :class="step === 1 ? 'text-gray-900 font-medium' : 'text-gray-400'">Project Details</p>
+                    <p :class="step === 2 ? 'text-gray-900 font-medium' : 'text-gray-400'">Role & Skills Requirements</p>
+                    <p :class="step === 3 ? 'text-gray-900 font-medium' : 'text-gray-400'">Job Preferences</p>
+                    <p :class="step === 4 ? 'text-gray-900 font-medium' : 'text-gray-400'">Submission</p>
                 </nav>
             </div>
 
@@ -114,14 +121,19 @@ const handleModeChange = (event) => {
                 <!-- 1st Section: Project Details -->
                 <div v-if="step === 1">
                     <h1 class="text-2xl font-bold mb-6">Project Details</h1>
-                    <input v-model="projectDetails.title" type="text" placeholder="Project Name" 
+                    <label for="jobTitle" class="text-lg font-bold mb-2">Project Title</label>
+                    <input v-model="projectDetails.title" type="text" 
                            class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4">
-                    <input v-model="projectDetails.companyName" type="text" placeholder="Company Name" 
+                    <label for="jobTitle" class="text-lg font-bold mb-2">Company Name</label>
+                    <input v-model="projectDetails.companyName" type="text" 
                            class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4">
-                    <input v-model="projectDetails.industry" type="text" placeholder="Industry" 
+                    <label for="jobTitle" class="text-lg font-bold mb-2">Industry</label>
+                    <input v-model="projectDetails.industry" type="text" 
                            class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4">
+                    <label for="jobTitle" class="text-lg font-bold mb-2">Project Description</label>
                     <textarea v-model="projectDetails.description" placeholder="Project Description"
                               class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4"></textarea>
+                    <label for="jobTitle" class="text-lg font-bold mb-2">Project Duration</label>
                     <div class="flex gap-4 mb-4">
                         <input v-model="projectDetails.startDate" type="date" 
                                class="w-1/2 border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300">
@@ -134,12 +146,12 @@ const handleModeChange = (event) => {
                 <div v-if="step === 2">
                     <h1 class="text-2xl font-bold mb-6"> Roles & Skills Requirements</h1>
                     <label for="jobTitle" class="text-lg font-bold mb-2">Job Title</label>
-                    <input id="jobTitle" v-model="jobRequirements.jobTitle" type="text" placeholder="Job Title"
+                    <input id="jobTitle" v-model="jobRequirements.jobTitle" type="text"
                             class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4">
                     
-                    <label for="input-skills" class="text-lg font-bold mb-3">Skills Required</label>
+                    <label for="input-skills" class="text-lg font-bold mb-3">Skills Required (Multiple)</label>
                     <div class="flex w-full items-center mb-4">
-                        <input id="input-skills" v-model="newSkill" type="text" placeholder="Skills Required (Multiple)" 
+                        <input id="input-skills" v-model="newSkill" type="text" 
                             class="flex-grow border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mr-2">
                         <button @click.prevent="addSkill" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                             Add
@@ -153,7 +165,8 @@ const handleModeChange = (event) => {
                             </button>
                         </div>
                     </div>
-                    <input v-model="jobRequirements.yearOfExperience" type="number" min="0" placeholder="Year(s) of Experience" 
+                    <label for="input-skills" class="text-lg font-bold mb-3">Years of Experience(s)</label>
+                    <input v-model="jobRequirements.yearOfExperience" type="number" min="0" 
                             class="w-full border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 mb-4">
                 </div>
 
@@ -216,7 +229,7 @@ const handleModeChange = (event) => {
             </div>
 
             <!-- Button Container -->
-            <div class="flex justify-between w-full p-6 mb-50">
+            <div class="flex justify-between w-full p-6 mb-20">
                 <button 
                         class="text-gray-500 hover:text-gray-800 ml-2">Cancel</button>
                 <div class="flex space-x-4">
@@ -227,7 +240,8 @@ const handleModeChange = (event) => {
                         Continue
                     </button>
                     <button v-else
-                            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                        @click="submitFormValues"    
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
                         Submit
                     </button>
                 </div>

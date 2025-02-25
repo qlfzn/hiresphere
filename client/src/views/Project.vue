@@ -2,7 +2,7 @@
 import Navbar from '@/components/Navbar.vue';
 import ProjectCard from '@/components/ProjectCard.vue';
 import { ref } from 'vue';
-import { useRouter, RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const projectData = ref({
     activeProjects: [
@@ -15,32 +15,52 @@ const projectData = ref({
 const router = useRouter();
 
 const routeToCreateProject = () => {
-    router.push('/new-project');
-}
+    router.push('/projects/create');
+};
 </script>
 
 <template>
-    <section>
+    <div class="bg-stone-100 min-h-screen">
+        <!-- Navbar -->
         <Navbar />
-    </section>
-    <div class="container mx-auto max-w-screen-lg p-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold">Projects</h1>
-                <p class="text-lg text-gray-600">List of current active projects</p>
-            </div>
-            <button class="mr-2 bg-white text-black px-4 py-2 rounded-md shadow-lg outline outline-black
-                           hover:bg-[#16235b] hover:text-white focus:ring-2 focus:ring-blue-400 
-                           active:bg-blue-800 transition"
-                           @click.prevent="routeToCreateProject">
-               New Project 
-            </button>
-        </div>
 
-        <div class="mt-6 space-y-4">
-            <ProjectCard v-for="project in projectData.activeProjects" :key="project.id" :project="project" />
-            <div v-if="projectData.activeProjects.length === 0" class="text-center text-gray-500 m-20">
-                No active project at the moment.
+        <!-- Header Section -->
+        <section class="bg-gradient-to-r from-[#f3f4f6] to-[#e5e7eb] text-[#16235b] py-8 mt-20">
+            <div class="container mx-auto max-w-screen-xl px-6">
+                <div class="flex justify-between items-center gap-6">
+                    <div>
+                        <h1 class="text-4xl font-bold flex items-center gap-2">
+                            📌 Your Projects
+                        </h1>
+                        <p class="text-lg text-gray-700">
+                            Manage and track your active projects here.
+                        </p>
+                    </div>
+                    <button
+                        class="bg-[#16235b] text-white px-6 py-3 rounded-md shadow-lg hover:bg-[#2b4570] focus:ring-2 focus:ring-blue-400 transition"
+                        @click.prevent="routeToCreateProject"
+                    >
+                        New Project
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Grid (Vertical Cards) -->
+        <div class="container mx-auto max-w-screen-lg px-6 py-10">
+            <div v-if="projectData.activeProjects.length > 0" class="grid grid-cols-1 gap-6">
+                <ProjectCard v-for="project in projectData.activeProjects" :key="project.id" :project="project" />
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="flex flex-col items-center justify-center text-center text-gray-500 mt-20">
+                <p class="text-lg">No active projects at the moment.</p>
+                <button 
+                    class="mt-4 bg-[#16235b] text-white px-5 py-2 rounded-lg shadow-md hover:bg-[#2b4570] transition"
+                    @click.prevent="routeToCreateProject"
+                >
+                    Start a New Project 🚀
+                </button>
             </div>
         </div>
     </div>

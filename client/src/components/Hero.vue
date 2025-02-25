@@ -14,7 +14,7 @@ subheader: {
 </script>
 
 <template>
-    <section class="pt-20 pb-5 mb-4">
+    <section class="pt-20 pb-5 mb-4 mt-15">
         <div
         class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center"
         >
