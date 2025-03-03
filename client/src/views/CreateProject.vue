@@ -82,7 +82,21 @@ const handleModeChange = (event) => {
 const router = useRouter();
 
 const submitFormValues = () => {
-    router.push('/projects/:id/matches')
+    const projectSummary = {
+        title: projectDetails.value.title,
+        companyName: projectDetails.value.companyName,
+        industry: projectDetails.value.industry,
+        jobTitle: jobRequirements.value.jobTitle,
+        skills: jobRequirements.value.skills,
+        mode: preferences.value.mode,
+        locationPreferences: preferences.value.locationPreferences
+        // Add other relevant fields for your summary
+    };
+
+    router.push({
+        path: '/projects/:id/matches',
+        query: projectSummary
+    })
 
 }
 </script>
