@@ -1,8 +1,9 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { X } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const step = ref(1);
 
@@ -90,12 +91,29 @@ const submitFormValues = () => {
         skills: jobRequirements.value.skills,
         mode: preferences.value.mode,
         locationPreferences: preferences.value.locationPreferences
-        // Add other relevant fields for your summary
+    };
+
+    const projectSubmit = {
+        title: projectDetails.value.title,
+        companyName: projectDetails.value.companyName,
+        description: projectDetails.value.description,
+        budget: preferences.value.maxCompensation,
+        is_active: true
     };
 
     router.push({
         path: '/projects/:id/matches',
         query: projectSummary
+    });
+
+    axios.post('/api/projects', {
+        projectSubmit
+    })
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(error) {
+        console.log(error);
     })
 
 }
