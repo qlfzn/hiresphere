@@ -9,8 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^3.0.2",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2"
+=======
+    "@supabase/supabase-js": "^2.49.1",
+    "express": "^4.21.2"
+>>>>>>> cde303fc1406592be31bd852f0ae9ea5f6cf6000
   }
 }
