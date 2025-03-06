@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar.vue';
 import { ref, computed } from 'vue';
 import { X } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import FormSidebar from '@/components/FormSidebar.vue';
 
 const step = ref(1);
 
@@ -105,29 +106,8 @@ const submitFormValues = () => {
     <section>
         <Navbar />
     </section>
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-gray-50 p-4 border-r flex flex-col h-full">
-            <div>
-                <h2 class="text-lg font-semibold mb-8 mt-22">Create New Project</h2>
-                <nav class="space-y-2">
-                    <p :class="step === 1 ? 'text-gray-900 font-medium' : 'text-gray-400'">Project Details</p>
-                    <p :class="step === 2 ? 'text-gray-900 font-medium' : 'text-gray-400'">Role & Skills Requirements</p>
-                    <p :class="step === 3 ? 'text-gray-900 font-medium' : 'text-gray-400'">Job Preferences</p>
-                    <p :class="step === 4 ? 'text-gray-900 font-medium' : 'text-gray-400'">Submission</p>
-                </nav>
-            </div>
-
-            <!-- Step Progress Indicator (pushes to the bottom) -->
-            <div class="mt-auto flex items-center space-x-4 ml-4">
-                <div v-for="n in 4" :key="n"
-                    class="w-8 h-8 flex items-center justify-center rounded-full font-bold"
-                    :class="step > n ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-700'">
-                    {{ n }}
-                </div>
-            </div>
-        </aside>
-
+    <div class="flex h-screen">
+        <FormSidebar />
         <!-- Main Content -->
         <div class="flex-1 flex flex-col h-full">
             <!-- Step Content -->
