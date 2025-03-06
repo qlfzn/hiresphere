@@ -20,12 +20,12 @@ const routeToCreateProject = () => {
 </script>
 
 <template>
-    <div class="bg-stone-100 min-h-screen">
+    <div class="bg-stone-100 min-h-screen pt-16">
         <!-- Navbar -->
         <Navbar />
 
         <!-- Header Section -->
-        <section class="bg-gradient-to-r from-[#f3f4f6] to-[#e5e7eb] text-[#16235b] py-8 mt-20">
+        <section class="bg-gradient-to-r from-[#f3f4f6] to-[#e5e7eb] text-[#16235b] py-8">
             <div class="container mx-auto max-w-screen-xl px-6">
                 <div class="flex justify-between items-center gap-6">
                     <div>
