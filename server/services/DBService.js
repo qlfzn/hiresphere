@@ -1,8 +1,19 @@
-import { createClient } from "@supabase/supabase-js";
+require("dotenv").config({ path: "../.env" });
+const { createClient } = require("@supabase/supabase-js");
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_KEY;
 
-const supabase = createClient(url, key);
+const supabase = createClient(url, key, {
+    db:{
+        schema: 'public'
+    },
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false
+    }
+});
 
-export default supabase;
+
+module.exports = supabase;
