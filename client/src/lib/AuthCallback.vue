@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import { supabase } from './supabaseClient';
+import { supabase } from '@lib/supabaseClient';
 import router from '@/router';
 
 onMounted(async() => {
@@ -10,21 +10,31 @@ onMounted(async() => {
         if (error) throw error;
 
         if (session && session.user) {
-            const role = session.user.user_metadata?.role;
-            
-            await fetch('http://localhost:5050/api/sync-user', {
-                method: 'POST',
+            try {
+                const userResponse = await fetch(`http://localhost:5050/api/user/${session.user.id}`, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: session.user.id,
-                    email: session.user.email,
-                    role: role
-                }),
-            });
-
-            router.push('/home');
+                    'Authorization': `Bearer ${session.access_token}`
+                }
+                });
+                
+                if (!userResponse.ok) {
+                throw new Error('Failed to fetch user data');
+                }
+                
+                const userData = await userResponse.json();
+                
+                // Redirect based on role
+                if (userData.role === 'Client') {
+                    router.push('/client/dashboard');
+                } else if (userData.role === 'Freelancer') {
+                    router.push('/freelancer/dashboard');
+                } else {
+                    router.push('/home');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                router.push('/home');
+            }
         } else {
             router.push('/auth/login');
         }

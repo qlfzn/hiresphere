@@ -5,7 +5,7 @@ const { syncUser, getUser } = require("../controllers/UserController");
 
 // Main route entry -> '/api/users'
 
-router.post('/user-sync', syncUser);
+router.post('/sync-user', syncUser);
 
 router.get('/get-user/:id', getUser);
 

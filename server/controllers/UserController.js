@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const supabase = require('../config/supabaseClient');
 
 async function syncUser(req, res) {
-    const {id, email, role} = req.body;
+    const {id, name, role} = req.body;
 
     try {
         const {data: existingUser, error} = await supabase
@@ -14,7 +14,7 @@ async function syncUser(req, res) {
         if (!existingUser) {
             const {data: newUser, error} = await supabase
                 .from('users')
-                .insert({id, email, role});
+                .insert({id, name, role});
             
             if (error) {
                 throw new Error(error.message);
@@ -23,13 +23,13 @@ async function syncUser(req, res) {
             if (role === 'Client') {
                 const {error: clientError} = await supabase
                     .from('clients')
-                    .insert({user_id: id});
+                    .insert({id: id});
                 
                 if (clientError) throw clientError;
             } else if (role === 'Freelancer') {
                 const {error: freelancerError} = await supabase
                     .from('freelancers')
-                    .insert({user_id: id});
+                    .insert({id: id});
                 
                 if (freelancerError) throw freelancerError;
             };
