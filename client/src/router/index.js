@@ -5,6 +5,7 @@ import CreateProject from "@/views/CreateProject.vue";
 import LandingPage from "@/views/LandingPage.vue";
 import Auth from "@/views/Auth.vue";
 import ProfileMatch from "@/views/ProfileMatch.vue";
+import { supabase } from "@/lib/supabaseClient";
 
 const routes = [
     {
@@ -14,39 +15,51 @@ const routes = [
         meta: { requiresAuth: false }
     },
     {
-        path: '/auth',
-        name: 'auth',
+        path: '/auth/login',
+        name: 'login',
         component: Auth,
         meta: { requiresAuth: false }
+    },
+    {
+        path: '/auth/signup',
+        name: 'signup',
+        component: Auth,
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/auth/callback',
+        name: 'auth-callback',
+        component: () => import('@/lib/AuthCallback.vue'),
     },
     {
         path: '/home',
         name: 'home',
         component: Home,
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: true}
     },
     {
         path: '/projects',
         name: 'projectView',
         component: Project,
+        meta: { requiresAuth: true }
     },
     {
         path: '/projects/create',
         name: 'createProject',
         component: CreateProject,
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: true}
     },
     {
         path: '/projects/:id',
         name: 'projectDetails',
         component: Project,
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: true}
     },
     {
         path: '/projects/:id/matches',
         name: 'profileMatch',
         component: ProfileMatch,
-        meta: { requiresAuth: false }
+        meta: { requiresAuth: true}
     },
     {
         path: '/:pathMatch(.*)*',
@@ -60,14 +73,15 @@ const router = createRouter({
 });
 
 // Redirect unauthenticated users
-// router.beforeEach((to, from, next) => {
-//     const isAuthenticated = localStorage.getItem("token"); // Replace with actual auth logic
-
-//     if (to.meta.requiresAuth && !isAuthenticated) {
-//         next('/auth'); // Redirect to login if not authenticated
-//     } else {
-//         next();
-//     }
-// });
+router.beforeEach( async (to, from, next) => {
+    const { data } = await supabase.auth.getSession();
+    const isAuthenticated = !!data.session;
+    
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        next('/auth/login')
+    } else {
+        next();
+    }
+});
 
 export default router;
