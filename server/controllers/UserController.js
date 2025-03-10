@@ -1,44 +1,87 @@
-const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const supabase = require('../services/DBService');
+const supabase = require('../config/supabaseClient');
 
-const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: "7d",
-    });
-};
+async function syncUser(req, res) {
+    const {id, email, role} = req.body;
 
-const registerUser = async (req, res) => {
-    const {email, password} = req.body;
-    
     try {
-        const {user, error} = await supabase.auth.signUp({
-            email: email,
-            password: password
-        })
+        const {data: existingUser, error} = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (!existingUser) {
+            const {data: newUser, error} = await supabase
+                .from('users')
+                .insert({id, email, role});
+            
+            if (error) {
+                throw new Error(error.message);
+            }
 
-        if (error) return res.status(500).json({ error: error.message });
-        res.sendStatus(201).json(user);
+            if (role === 'Client') {
+                const {error: clientError} = await supabase
+                    .from('clients')
+                    .insert({user_id: id});
+                
+                if (clientError) throw clientError;
+            } else if (role === 'Freelancer') {
+                const {error: freelancerError} = await supabase
+                    .from('freelancers')
+                    .insert({user_id: id});
+                
+                if (freelancerError) throw freelancerError;
+            };
+
+            return res.status(201).json({message: "User synced successfully", user: newUser});
+        } else {
+            return res.status(200).json({message: "User already exists", user: existingUser});
+        }
     } catch (error) {
-        res.status(500).json({error: error});
+        console.error('Error syncing user:', error);
+        return res.status(500).json({message: error.message});
     }
-    
-};
+}
 
-const getUsers = async (req, res) => {
+async function getUser(req, res) {
+    const {id} = req.body;
+
     try {
-        console.log(supabase);
-        const { data: {user}, error } = await supabase.auth.getUser();
+        const {data: user, error} = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', id)
+            .single();
+        
+        if (error || !user) return res.status(404).json('User not found');
 
-        if (error) {
-            return res.status(500).json({ error: error.message });
+        let roleData = null;
+
+        if (user.role === 'Client') {
+            const {data: clientData} = await supabase
+                .from('clients')
+                .select('*')
+                .eq('user_id', id)
+                .single();
+            roleData = clientData;
+        } else if (user.role === 'Freelancer') {
+            const {data: freelancerData} = await supabase
+                .from('freelancers')
+                .select('*')
+                .eq('user_id', id)
+                .single();
+            roleData = freelancerData;
         }
 
-        res.status(200).json(user);
+        res.json({ ...user, roleData });
+
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json(error.message);
     }
+}
+
+module.exports = { 
+    syncUser,
+    getUser 
 };
-
-
-module.exports = { registerUser, getUsers };

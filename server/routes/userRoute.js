@@ -1,11 +1,12 @@
 // This router handles projects CRUD operations 
 const express = require("express");
 const router = express.Router();
-const { registerUser, getUsers } = require("../controllers/UserController");
+const { syncUser, getUser } = require("../controllers/UserController");
 
-// route for add project
-router.post("/signup", registerUser);
+// Main route entry -> '/api/users'
 
-router.get("/all", getUsers);
+router.post('/user-sync', syncUser);
+
+router.get('/get-user/:id', getUser);
 
 module.exports = router;
