@@ -21,7 +21,7 @@ async function getFreelancerProfile(req, res) {
         const { data: freelancer, error: freelancerError } = await supabase
             .from('freelancers')
             .select('*')
-            .eq('user_id', id)
+            .eq('id', id)
             .single();
         
         if (freelancerError && freelancerError.code !== 'PGRST116') {
@@ -79,7 +79,7 @@ async function updateFreelancerProfile(req, res) {
         // Update users table
         const { error: userError } = await supabase
             .from('users')
-            .update({ first_name, last_name })
+            .update(`name: ${first_name} ${last_name}`)
             .eq('id', id);
         
         if (userError) throw userError;
@@ -88,7 +88,7 @@ async function updateFreelancerProfile(req, res) {
         const { data: existingFreelancer, error: checkError } = await supabase
             .from('freelancers')
             .select('id')
-            .eq('user_id', id)
+            .eq('id', id)
             .single();
         
         let freelancerError;
@@ -98,7 +98,7 @@ async function updateFreelancerProfile(req, res) {
             const { error } = await supabase
                 .from('freelancers')
                 .insert({
-                    user_id: id,
+                    id: id,
                     first_name,
                     last_name,
                     title,
@@ -115,18 +115,22 @@ async function updateFreelancerProfile(req, res) {
             // Update freelancer record
             const { error } = await supabase
                 .from('freelancers')
+                // .update({
+                //     first_name,
+                //     last_name,
+                //     title,
+                //     bio,
+                //     hourly_rate,
+                //     skills,
+                //     experience_level,
+                //     availability,
+                //     location
+                // })
                 .update({
-                    first_name,
-                    last_name,
-                    title,
-                    bio,
-                    hourly_rate,
-                    skills,
-                    experience_level,
-                    availability,
-                    location
+                    bio: bio,
+                    skills: skills
                 })
-                .eq('user_id', id);
+                .eq('id', id);
             
             freelancerError = error;
         }

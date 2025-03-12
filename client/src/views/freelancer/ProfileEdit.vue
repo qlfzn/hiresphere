@@ -35,7 +35,7 @@ onMounted(async () => {
     }
     
     // Fetch freelancer data from your API
-    const response = await fetch(`http://localhost:5050/api/freelancer/${session.user.id}`, {
+    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}`, {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
@@ -49,6 +49,10 @@ onMounted(async () => {
           freelancerProfile.value[key] = data[key];
         }
       });
+
+      if (!Array.isArray(freelancerProfile.value.skills)) {
+        freelancerProfile.value.skills = [];
+      }
     }
     
     isLoading.value = false;
@@ -82,7 +86,7 @@ async function saveProfile() {
       return;
     }
     
-    const response = await fetch(`http://localhost:5050/api/freelancer/${session.user.id}`, {
+    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

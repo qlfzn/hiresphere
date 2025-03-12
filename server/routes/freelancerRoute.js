@@ -12,9 +12,9 @@ router.get('/:id', freelancerController.getFreelancerProfile);
 router.put('/:id', freelancerController.updateFreelancerProfile);
 
 // Upload resume
-router.post('/:id/resume', freelancerController.uploadResume);
+// router.post('/:id/resume', freelancerController.uploadResume);
 
 // Get freelancer matches
-router.get('/:id/matches', freelancerController.getMatches);
+// router.get('/:id/matches', freelancerController.getMatches);
 
 module.exports = router;

@@ -16,8 +16,26 @@ async function loginWithEmail() {
     if (error) throw error;
 
     if (data.user) {
+      const response = await fetch(`http://localhost:5050/api/users/get-user/${data.user.id}`, {
+        headers: {
+          'Authorization': `Bearer ${data.access_token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load user profile');
+      };
+
+      const userData = await response.json();
+      console.log(userData);
+
+      if (userData.role === 'Freelancer') {
+        router.push('/freelancer/dashboard');
+      } else if (userData.role === 'Client') {
+        router.push('/home');
+      }
+
       alert('Login successful!');
-      router.push('/home');
     }
 
   } catch (error) {

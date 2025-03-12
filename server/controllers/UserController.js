@@ -45,7 +45,7 @@ async function syncUser(req, res) {
 }
 
 async function getUser(req, res) {
-    const {id} = req.body;
+    const {id} = req.params;
 
     try {
         const {data: user, error} = await supabase
