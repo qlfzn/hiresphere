@@ -12,7 +12,6 @@ async function getFreelancerProfile(req, res) {
     const { id } = req.params;
 
     try {
-        // Get basic user info
         const { data: user, error: userError } = await supabase
             .from('users')
             .select('*')
@@ -21,7 +20,6 @@ async function getFreelancerProfile(req, res) {
         
         if (userError) throw userError;
         
-        // Get freelancer specific info
         const { data: freelancer, error: freelancerError } = await supabase
             .from('freelancers')
             .select('*')
@@ -32,7 +30,6 @@ async function getFreelancerProfile(req, res) {
             throw freelancerError;
         }
         
-        // Combine data
         const profile = {
             ...user,
             ...freelancer,
@@ -47,7 +44,6 @@ async function getFreelancerProfile(req, res) {
             )
         };
         
-        // Get project matches if available
         const { data: matches, error: matchesError } = await supabase
             .from('project_matches')
             .select('*, projects(*)')
@@ -80,7 +76,6 @@ async function updateFreelancerProfile(req, res) {
     } = req.body;
 
     try {
-        // Update users table
         const { error: userError } = await supabase
             .from('users')
             .update(`name: ${first_name} ${last_name}`)
@@ -88,7 +83,6 @@ async function updateFreelancerProfile(req, res) {
         
         if (userError) throw userError;
         
-        // Check if freelancer record exists
         const { data: existingFreelancer, error: checkError } = await supabase
             .from('freelancers')
             .select('id')
@@ -98,7 +92,6 @@ async function updateFreelancerProfile(req, res) {
         let freelancerError;
         
         if (!existingFreelancer) {
-            // Create freelancer record
             const { error } = await supabase
                 .from('freelancers')
                 .insert({
@@ -114,7 +107,6 @@ async function updateFreelancerProfile(req, res) {
             
             freelancerError = error;
         } else {
-            // Update freelancer record
             const { error } = await supabase
                 .from('freelancers')
                 .update({
@@ -144,7 +136,6 @@ async function getResumeUrl(req, res) {
     const { id } = req.params;
 
     try {
-        // Get resume URL
         const { data, error } = await supabase
             .from('freelancers')
             .select('resume_url')

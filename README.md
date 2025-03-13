@@ -1,2 +1,4 @@
-# hiresphere
-HireSphere is a platform that connects range of projects from clients with pool of freelance talents, driven by AI-powered client-freelance matching system
+# Hiresphere
+HireSphere is an AI-powered platform that seamlessly connects clients with a diverse pool of freelance talent, matching projects with the right professionals.
+
+## Architecture
