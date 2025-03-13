@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import router from '@/router';
 
 const email = ref('');
+const name = ref('');
 const role = ref('');
 const password = ref('');
 
@@ -16,7 +17,7 @@ async function signUpWithEmail() {
 
     if (error) throw error;
 
-    await fetch('http://localhost:5050/api/sync-user', {
+    await fetch('http://localhost:5050/api/users/sync-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -24,7 +25,8 @@ async function signUpWithEmail() {
       body: JSON.stringify({
         id : data.user.id,
         email: data.user.email,
-        role: role.value
+        name: name.value,
+        role: role.value,
       }),
     });
 
@@ -46,6 +48,7 @@ async function signUpWithGoogle() {
           prompt: 'consent',
         },
         data: {
+          name: name.value,
           role: role.value
         }
       },
@@ -61,6 +64,7 @@ async function signUpWithGoogle() {
       body: JSON.stringify({
         id : data.user.id,
         email: data.user.email,
+        name: name.value,
         role: role.value 
       }),
     });
@@ -97,12 +101,18 @@ async function signUpWithGoogle() {
               <input v-model="email" type="email" id="email" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="email@example.com" required>
             </div>
           </div>
+          <div class="flex space-x-4">
+            <div class="w-full">
+              <label for="name" class="text-sm font-medium text-gray-900">Name</label>
+              <input v-model="name" type="text" id="name" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Your Name" required>
+            </div>
+          </div>
           <div>
             <label for="country" class="text-sm font-medium text-gray-900">Role</label>
             <select v-model="role" id="role" class="w-full p-2 border border-gray-300 rounded-lg" required>
               <option>Choose a role</option>
               <option>Client</option>
-              <option>Freelance</option>
+              <option>Freelancer</option>
             </select>
           </div>
           <div>
