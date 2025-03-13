@@ -21,7 +21,7 @@ onMounted(async () => {
     }
     
     // Check if user already has a resume
-    const response = await fetch(`http://localhost:5050/api/freelancer/${session.user.id}/resume`, {
+    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}/resume`, {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
@@ -39,7 +39,11 @@ onMounted(async () => {
 });
 
 function handleFileChange(event) {
-  const file = event.target.files[0];
+  const file = event.target.files?.[0];
+  if (!file) {
+    return;
+  }
+
   if (file) {
     // Check if file is PDF
     if (file.type !== 'application/pdf') {
@@ -80,43 +84,28 @@ async function uploadResume() {
     
     // Create a FormData object
     const formData = new FormData();
-    formData.append('resume', resumeFile.value);
-    
-    // Upload file with progress tracking
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://localhost:5050/api/freelancer/${session.user.id}/resume`);
-    xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
-    
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        progress.value = Math.round((e.loaded / e.total) * 100);
-      }
-    };
-    
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        success.value = true;
-        // Redirect after short delay
-        setTimeout(() => {
-          router.push('/freelancer/dashboard');
-        }, 1500);
-      } else {
-        try {
-          const response = JSON.parse(xhr.responseText);
-          error.value = response.message || 'Upload failed';
-        } catch (e) {
-          error.value = 'Upload failed';
-        }
-      }
-      isUploading.value = false;
-    };
-    
-    xhr.onerror = () => {
-      error.value = 'Network error during upload';
-      isUploading.value = false;
-    };
-    
-    xhr.send(formData);
+    formData.append('file', resumeFile.value);
+
+    // Upload file with progress tracking using Fetch API
+    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}/resume/upload`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      success.value = true;
+      // Redirect after short delay
+      setTimeout(() => {
+        router.push('/freelancer/dashboard');
+      }, 1500);
+    } else {
+      const data = await response.json();
+      error.value = data.message || 'Upload failed';
+    }
+    isUploading.value = false;
   } catch (err) {
     error.value = err.message;
     isUploading.value = false;

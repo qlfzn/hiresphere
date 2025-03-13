@@ -50,9 +50,6 @@ onMounted(async () => {
         }
       });
 
-      if (!Array.isArray(freelancerProfile.value.skills)) {
-        freelancerProfile.value.skills = [];
-      }
     }
     
     isLoading.value = false;
@@ -100,6 +97,8 @@ async function saveProfile() {
     }
     
     successMessage.value = 'Profile saved successfully!';
+
+    console.log(freelancerProfile.value);
     
     // Redirect after short delay
     setTimeout(() => {

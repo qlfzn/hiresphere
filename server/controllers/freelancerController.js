@@ -2,6 +2,10 @@ const supabase = require('../config/supabaseClient');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage }).single('file');
 
 // Get freelancer profile
 async function getFreelancerProfile(req, res) {
@@ -99,8 +103,6 @@ async function updateFreelancerProfile(req, res) {
                 .from('freelancers')
                 .insert({
                     id: id,
-                    first_name,
-                    last_name,
                     title,
                     bio,
                     hourly_rate,
@@ -115,20 +117,14 @@ async function updateFreelancerProfile(req, res) {
             // Update freelancer record
             const { error } = await supabase
                 .from('freelancers')
-                // .update({
-                //     first_name,
-                //     last_name,
-                //     title,
-                //     bio,
-                //     hourly_rate,
-                //     skills,
-                //     experience_level,
-                //     availability,
-                //     location
-                // })
                 .update({
-                    bio: bio,
-                    skills: skills
+                    title,
+                    bio,
+                    hourly_rate,
+                    skills,
+                    experience_level,
+                    availability,
+                    location
                 })
                 .eq('id', id);
             
@@ -144,7 +140,72 @@ async function updateFreelancerProfile(req, res) {
     }
 }
 
+async function getResumeUrl(req, res) {
+    const { id } = req.params;
+
+    try {
+        // Get resume URL
+        const { data, error } = await supabase
+            .from('freelancers')
+            .select('resume_url')
+            .eq('id', id)
+            .single();
+        
+        if (error) throw error;
+        
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error('Error getting resume URL:', error);
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+async function uploadResume(req, res) {
+    upload(req, res, async (err) => {
+        if (err) {
+            console.error('Error uploading resume:', err);
+            return res.status(500).json({ message: err.message });
+        }
+        
+        const { id } = req.params;
+        const file = req.file;
+
+        const authHeader = req.headers.authorization;
+        const token = authHeader?.split(' ')[1];
+
+        if (!token) {
+            return res.status(401).json({ message: 'Authentication required!' });
+        }
+
+        try {
+
+            const { data, error } = await supabase.storage
+                .from('freelancer-resume')
+                .upload(`freelancer-${id}/${file.originalname}`, file.buffer, {
+                    contentType: file.mimetype
+                });
+            
+            if (error) throw error;
+            
+            // Update resume URL in freelancers table
+            const { error: updateError } = await supabase
+                .from('freelancers')
+                .update({ resume_url: data.path })
+                .eq('id', id);
+            
+            if (updateError) throw updateError;
+            
+            return res.status(200).json(data);
+        } catch (error) {
+            console.error('Error uploading resume:', error);
+            return res.status(500).json({ message: error.message });
+        }
+    });
+}
+
 module.exports = {
     getFreelancerProfile,
-    updateFreelancerProfile
+    updateFreelancerProfile,
+    getResumeUrl,
+    uploadResume
 };

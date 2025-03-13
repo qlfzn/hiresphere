@@ -29,6 +29,8 @@ onMounted(async () => {
     }
     
     freelancerProfile.value = await response.json();
+    freelancerProfile.value.profile_complete = true;
+    freelancerProfile.value.skills = JSON.parse(freelancerProfile.value.skills);
     isLoading.value = false;
   } catch (err) {
     error.value = err.message;
@@ -64,12 +66,12 @@ function navigateToResumeUpload() {
         <div v-if="freelancerProfile.profile_complete" class="mb-4">
           <div class="flex items-center mb-2">
             <span class="font-medium w-1/3">Name:</span>
-            <span>{{ freelancerProfile.first_name }} {{ freelancerProfile.last_name }}</span>
+            <span>{{ freelancerProfile.name }}</span>
           </div>
           <div class="flex items-center mb-2">
             <span class="font-medium w-1/3">Title:</span>
             <span>{{ freelancerProfile.title || 'Not set' }}</span>
-          </div>
+          </div> 
           <div class="flex items-center mb-2">
             <span class="font-medium w-1/3">Skills:</span>
             <div v-if="freelancerProfile.skills && freelancerProfile.skills.length">
