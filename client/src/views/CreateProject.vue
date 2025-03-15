@@ -225,6 +225,21 @@ const submitFormValues = () => {
                             <option value="Manual">Manual</option>
                         </select>
                     </div>
+                    <div class="flex flex-col w-full mb-4">
+                        <label for="projectPDF" class="text-lg font-bold mb-2">Upload Project PDF</label>
+                        <input type="file" id="projectPDF" @change="handleFileUpload" accept=".pdf"
+                            class="border px-4 py-2 rounded-lg focus:ring focus:ring-blue-300 cursor-pointer bg-white" />
+                        <p v-if="uploadedFile" class="mt-2 text-sm text-gray-600">Uploaded: {{ uploadedFile.name }}</p>
+                    </div>
+                          <!-- Submit Button -->
+                    <button @click="submitProject" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                        Submit
+                    </button>
+
+                    <div v-if="extractedInfo" class="mt-4 p-4 bg-gray-100 border rounded-lg">
+                        <h3 class="text-lg font-bold">Extracted Project Information:</h3>
+                        <pre class="text-sm text-gray-700">{{ extractedInfo }}</pre>
+                    </div>
                 </div>
             </div>
 
@@ -249,4 +264,64 @@ const submitFormValues = () => {
         </div>
     </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        priorities: '',
+        additionalRequirements: '',
+        matchingMode: '',
+      },
+      uploadedFile: null,
+      extractedInfo: null,
+    };
+  },
+  methods: {
+    handleFileUpload(event) {
+      this.uploadedFile = event.target.files[0];
+    },
+    async submitProject() {
+    if (!this.uploadedFile) {
+        alert("Please upload a PDF.");
+        return;
+    }
 
+    let formData = new FormData();
+    formData.append("priorities", this.form.priorities);
+    formData.append("additionalRequirements", this.form.additionalRequirements);
+    formData.append("matchingMode", this.form.matchingMode);
+    formData.append("pdf", this.uploadedFile);
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/upload", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Unknown error occurred");
+        }
+
+        const result = await response.json();
+        console.log("Server Response:", result); // Debugging line
+
+        if (result.extractedText) {  // FIXED: Using correct key
+            this.extractedInfo = result.extractedText;
+            alert("PDF uploaded successfully!\nExtracted Text: " + result.extractedText);
+        } else {
+            alert("PDF uploaded, but no text was extracted.");
+        }
+
+    } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Error processing the PDF: " + error.message);
+    }
+    }
+  }
+};
+</script>
