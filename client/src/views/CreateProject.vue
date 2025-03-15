@@ -119,16 +119,6 @@ const submitFormValues = async () => {
     
     isSubmitting.value = true;
     
-    const projectSummary = {
-        title: projectDetails.value.title,
-        companyName: projectDetails.value.companyName,
-        industry: projectDetails.value.industry,
-        jobTitle: jobRequirements.value.jobTitle,
-        skills: jobRequirements.value.skills,
-        mode: preferences.value.mode,
-        locationPreferences: preferences.value.locationPreferences
-    };
-
     const projectSubmit = {
         title: projectDetails.value.title,
         description: projectDetails.value.description,
@@ -137,7 +127,8 @@ const submitFormValues = async () => {
         working_mode: preferences.value.mode,
         location: preferences.value.locationPreferences,
         budget: preferences.value.maxCompensation,
-        is_active: true
+        is_active: true,
+        due_date: projectDetails.value.endDate
     };
 
     try {
