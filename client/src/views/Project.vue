@@ -1,43 +1,13 @@
 <script setup>
+import { supabase } from '@/lib/supabaseClient';
 import Navbar from '@/components/Navbar.vue';
 import ProjectCard from '@/components/ProjectCard.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Plus, Filter, Search, SortAsc, Grid, List } from 'lucide-vue-next';
 
 const projectData = ref({
-  activeProjects: [
-    {
-      id: 123, 
-      title: "Project ABC", 
-      description: "This project aims to redesign the company website with modern UI/UX principles and improve overall user engagement.",
-      status: "active",
-      progress: 65,
-      dueDate: "2025-04-15",
-      members: 4,
-      client: "ABC Corp"
-    },
-    {
-      id: 124, 
-      title: "Project XYZ", 
-      description: "Developing a new mobile application for inventory management with real-time tracking and analytics dashboards.",
-      status: "active",
-      progress: 32,
-      dueDate: "2025-05-20",
-      members: 6,
-      client: "XYZ Inc"
-    },
-    {
-      id: 125, 
-      title: "Project 123", 
-      description: "Implementation of an AI-powered customer support system to enhance response time and service quality.",
-      status: "active",
-      progress: 78,
-      dueDate: "2025-03-30",
-      members: 3,
-      client: "123 Solutions"
-    },
-  ]
+  activeProjects: []
 });
 
 const searchQuery = ref('');
@@ -62,7 +32,8 @@ const sortOptions = [
 
 const filteredProjects = computed(() => {
   let projects = projectData.value.activeProjects;
-  
+
+
   // Filter by search query
   if (searchQuery.value.trim() !== '') {
     const query = searchQuery.value.toLowerCase();
@@ -72,15 +43,14 @@ const filteredProjects = computed(() => {
       project.client.toLowerCase().includes(query)
     );
   }
-  
+
   // Filter by status
   if (selectedStatus.value !== 'all') {
     projects = projects.filter(project => project.status === selectedStatus.value);
   }
-  
+
   // Sort projects
   if (sortBy.value === 'newest') {
-    // In a real app, you'd sort by creation date
     projects = [...projects].reverse();
   } else if (sortBy.value === 'oldest') {
     // No change needed if already sorted by oldest
@@ -91,15 +61,45 @@ const filteredProjects = computed(() => {
   } else if (sortBy.value === 'progress') {
     projects = [...projects].sort((a, b) => b.progress - a.progress);
   }
-  
+
   return projects;
 });
+
 
 const router = useRouter();
 
 const routeToCreateProject = () => {
   router.push('/projects/create');
 };
+
+onMounted(async () => {
+    try{
+        // Fetch projects from API
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!session) {
+            router.push('/auth/login');
+            return;
+        }
+        const response = await fetch(`http://localhost:5050/api/projects?user_id=${session.user.id}`, {
+            headers: {
+                'Authorization': `Bearer ${session.access_token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to load projects');
+        };
+
+        const result = await response.json();
+
+
+        projectData.value.activeProjects = result.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+});
 </script>
 
 <template>
@@ -108,7 +108,7 @@ const routeToCreateProject = () => {
     <Navbar />
     
     <!-- Header Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12">
+    <section class="bg-gradient-to-r from-[#2b4570] to-indigo-400 text-white py-12">
       <div class="container mx-auto max-w-screen-xl px-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>

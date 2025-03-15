@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, computed } from 'vue';
-import { Calendar, Users, ChevronRight, MoreVertical, ExternalLink } from 'lucide-vue-next';
+import { Calendar, Users, ChevronRight, MoreVertical, ExternalLink, MapPin, Laptop } from 'lucide-vue-next';
 
 const props = defineProps({
   project: {
@@ -13,10 +13,11 @@ const props = defineProps({
   }
 });
 
+
 const formattedDate = computed(() => {
-  if (!props.project.dueDate) return '';
+  if (!props.project.due_date) return '';
   
-  const date = new Date(props.project.dueDate);
+  const date = new Date(props.project.due_date);
   return new Intl.DateTimeFormat('en-US', { 
     year: 'numeric', 
     month: 'short', 
@@ -25,26 +26,26 @@ const formattedDate = computed(() => {
 });
 
 const statusClasses = computed(() => {
-  switch(props.project.status.toLowerCase()) {
-    case 'active':
-      return 'bg-green-100 text-green-800 border-green-200';
-    case 'completed':
-      return 'bg-blue-100 text-blue-800 border-blue-200';
-    case 'on-hold':
-      return 'bg-amber-100 text-amber-800 border-amber-200';
-    case 'delayed':
-      return 'bg-red-100 text-red-800 border-red-200';
-    default:
-      return 'bg-gray-100 text-gray-800 border-gray-200';
-  }
+    if (props.project.is_active) {
+        return 'bg-green-100 text-green-800 border-green-200'; // Active status
+    } else {
+        return 'bg-gray-100 text-gray-800 border-gray-200'; // Inactive or completed
+    }
 });
 
-const progressColorClass = computed(() => {
-  const progress = props.project.progress || 0;
-  if (progress >= 75) return 'bg-green-500';
-  if (progress >= 50) return 'bg-blue-500';
-  if (progress >= 25) return 'bg-amber-500';
-  return 'bg-red-500';
+
+const workingModeClasses = computed(() => {
+    if (!props.project.working_mode) {
+        return 'bg-gray-100 text-gray-800 border-gray-200'; // Not specified
+    } else if (props.project.working_mode.toLowerCase() === 'remote') {
+        return 'bg-indigo-100 text-indigo-800 border-indigo-200'; // Remote
+    } else if (props.project.working_mode.toLowerCase() === 'hybrid') {
+        return 'bg-purple-100 text-purple-800 border-purple-200'; // Hybrid
+    } else if (props.project.working_mode.toLowerCase() === 'onsite') {
+        return 'bg-teal-100 text-teal-800 border-teal-200'; // Onsite
+    } else {
+        return 'bg-gray-100 text-gray-800 border-gray-200'; // Not specified
+    }
 });
 </script>
 
@@ -60,23 +61,27 @@ const progressColorClass = computed(() => {
           <MoreVertical class="w-5 h-5" />
         </button>
       </div>
-      <div class="mt-1 text-sm text-gray-500">{{ project.client }}</div>
+      <div class="mt-1 text-sm text-gray-500">{{ project.clients.company }}</div>
     </div>
     
     <!-- Card Body -->
     <div class="p-5 flex-1">
       <p class="text-gray-600 text-sm line-clamp-3 mb-4">{{ project.description }}</p>
       
-      <!-- Progress Bar -->
-      <div class="mb-4">
-        <div class="flex justify-between items-center mb-1">
-          <span class="text-sm font-medium text-gray-700">Progress</span>
-          <span class="text-sm font-medium text-gray-700">{{ project.progress }}%</span>
+      <!-- Location and Working Mode -->
+      <div class="mb-4 space-y-3">
+        <!-- Location -->
+        <div class="flex items-center">
+          <MapPin class="w-4 h-4 mr-2 text-gray-400" />
+          <span class="text-sm text-gray-700">{{ project.location || 'Not specified' }}</span>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2">
-          <div class="h-2 rounded-full" 
-               :class="progressColorClass"
-               :style="{ width: `${project.progress}%` }"></div>
+        
+        <!-- Working Mode -->
+        <div class="flex items-center">
+          <Laptop class="w-4 h-4 mr-2 text-gray-400" />
+          <span :class="['px-2 py-0.5 text-xs font-medium rounded-md border', workingModeClasses]">
+            {{ project.working_mode || 'Not specified' }}
+          </span>
         </div>
       </div>
       
@@ -86,17 +91,13 @@ const progressColorClass = computed(() => {
           <Calendar class="w-4 h-4 mr-2 text-gray-400" />
           <span>{{ formattedDate }}</span>
         </div>
-        <div class="flex items-center text-sm text-gray-600">
-          <Users class="w-4 h-4 mr-2 text-gray-400" />
-          <span>{{ project.members }} members</span>
-        </div>
       </div>
     </div>
     
     <!-- Card Footer -->
     <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
       <span :class="['px-3 py-1 text-xs font-medium rounded-full border', statusClasses]">
-        {{ project.status.charAt(0).toUpperCase() + project.status.slice(1) }}
+        {{ project.is_active ? 'Active' : 'Inactive' }}
       </span>
       <button class="flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">
         View Details
@@ -116,7 +117,7 @@ const progressColorClass = computed(() => {
             <div class="flex items-center">
               <h2 class="text-lg font-semibold text-gray-800">{{ project.title }}</h2>
               <span :class="['ml-3 px-2.5 py-0.5 text-xs font-medium rounded-full border', statusClasses]">
-                {{ project.status.charAt(0).toUpperCase() + project.status.slice(1) }}
+                {{ project.is_active ? 'Active' : 'Inactive' }}
               </span>
             </div>
             <div class="text-sm text-gray-500 mt-1">{{ project.client }}</div>
@@ -130,29 +131,18 @@ const progressColorClass = computed(() => {
       
       <!-- Right Column -->
       <div class="flex flex-col sm:flex-row items-center gap-4">
-        <!-- Progress Circle -->
-        <div class="relative w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
-          <svg viewBox="0 0 36 36" class="w-16 h-16 absolute">
-            <path
-              d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-              fill="none"
-              stroke="#e6e6e6"
-              stroke-width="3"
-            />
-            <path
-              d="M18 2.0845
-                a 15.9155 15.9155 0 0 1 0 31.831
-                a 15.9155 15.9155 0 0 1 0 -31.831"
-              fill="none"
-              :stroke="progressColorClass.replace('bg-', 'text-')"
-              stroke-width="3"
-              :stroke-dasharray="`${project.progress}, 100`"
-              class="progress-circle"
-            />
-          </svg>
-          <span class="text-sm font-semibold">{{ project.progress }}%</span>
+        <!-- Location and Working Mode Badge -->
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center">
+            <MapPin class="w-4 h-4 mr-2 text-gray-400" />
+            <span class="text-sm text-gray-700">{{ project.location || 'Not specified' }}</span>
+          </div>
+          <div class="flex items-center">
+            <Laptop class="w-4 h-4 mr-2 text-gray-400" />
+            <span :class="['px-2 py-0.5 text-xs font-medium rounded-md border', workingModeClasses]">
+              {{ project.working_mode || 'Not specified' }}
+            </span>
+          </div>
         </div>
         
         <!-- Project Meta -->
@@ -160,10 +150,6 @@ const progressColorClass = computed(() => {
           <div class="flex items-center text-gray-600">
             <Calendar class="w-4 h-4 mr-2 text-gray-400" />
             <span>{{ formattedDate }}</span>
-          </div>
-          <div class="flex items-center text-gray-600">
-            <Users class="w-4 h-4 mr-2 text-gray-400" />
-            <span>{{ project.members }} members</span>
           </div>
         </div>
         
@@ -181,10 +167,3 @@ const progressColorClass = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.progress-circle {
-  transform-origin: center;
-  transform: rotate(-90deg);
-}
-</style>

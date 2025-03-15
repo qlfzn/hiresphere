@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/freelancers', freelancerRoutes);
+app.use('/api/projects', projectRoutes);
 
 app.listen(port, () => {
     console.log(`App is listening at: ${port}`);

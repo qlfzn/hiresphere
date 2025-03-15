@@ -1,10 +1,10 @@
 <script setup>
+import { supabase } from '@/lib/supabaseClient';
 import Navbar from '@/components/Navbar.vue';
 import { ref, computed } from 'vue';
 import { X, CheckCircle } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import FormSidebar from '@/components/FormSidebar.vue';
 
 const step = ref(1);
 const totalSteps = 4;
@@ -86,9 +86,7 @@ const handleContinue = () => {
     if (isStepValid()) {
         step.value++;
         showSkillsError.value = false;
-    } else {
-        // Visual feedback will be handled by validation styling
-    }
+    } 
 };
 
 const addSkill = () => {
@@ -133,19 +131,39 @@ const submitFormValues = async () => {
 
     const projectSubmit = {
         title: projectDetails.value.title,
-        companyName: projectDetails.value.companyName,
         description: projectDetails.value.description,
+        job_title: jobRequirements.value.jobTitle,
+        skills_required: jobRequirements.value.skills,
+        working_mode: preferences.value.mode,
+        location: preferences.value.locationPreferences,
         budget: preferences.value.maxCompensation,
         is_active: true
     };
 
     try {
-        const response = await axios.post('/api/projects', { projectSubmit });
+        // Get current user
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+            router.push('/auth/login');
+            return;
+        }
+
+        const response = await fetch('http://localhost:5050/api/projects/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                projectSubmit, 
+                user_id: session.user.id 
+            })
+        });
+
         console.log(response);
         
         router.push({
-            path: '/projects/:id/matches',
-            query: projectSummary
+            path: '/projects/',
         });
     } catch (error) {
         console.error(error);
@@ -168,14 +186,6 @@ const submitFormValues = async () => {
             <div class="pt-10 pb-8 px-6">
                 <div class="flex items-center justify-between">
                     <div v-for="(label, index) in stepLabels" :key="index" class="flex flex-col items-center flex-1 relative">
-                        <!-- Progress line -->
-                        <div v-if="index < stepLabels.length - 1" class="absolute w-full top-4 px-8">
-                            <div class="h-1 w-full bg-gray-200">
-                                <div :class="[step > index+1 ? 'bg-green-500' : 'bg-gray-200', 'h-full transition-all duration-300']" 
-                                    :style="{ width: step > index ? '100%' : '0%' }"></div>
-                            </div>
-                        </div>
-                        
                         <!-- Circle -->
                         <div :class="[
                                 'flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-300',
@@ -417,8 +427,8 @@ const submitFormValues = async () => {
                             <select v-model="matchingConfig.matchingMode" id="matching-mode" 
                                 class="w-full border border-gray-300 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white">
                                 <option value="" disabled>Choose a matching mode</option>
-                                <option value="Auto">Auto (System matches candidates automatically)</option>
-                                <option value="Manual">Manual (You review all potential candidates)</option>
+                                <option value="Strict">Strict</option>
+                                <option value="Flexible">Flexible</option>
                             </select>
                             <p class="mt-1 text-xs text-gray-500">Select how you would like to match with candidates</p>
                         </div>
