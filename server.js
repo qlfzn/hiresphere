@@ -78,7 +78,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
         res.status(500).json({ error: "Error processing the PDF" });
     }
 });
-
+'commennt'
 // Start the Server
 app.listen(PORT, () => {
     console.log(`Server running on http://127.0.0.1:${PORT}`);
