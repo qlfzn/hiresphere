@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import { supabase } from '@lib/supabaseClient';
+import { supabase } from './supabaseClient';
 import router from '@/router';
 
 onMounted(async() => {
