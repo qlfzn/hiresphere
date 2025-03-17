@@ -35,7 +35,7 @@ onMounted(async () => {
     }
     
     // Fetch freelancer data from your API
-    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}`, {
+    const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/freelancers/${session.user.id}`, {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
@@ -83,7 +83,7 @@ async function saveProfile() {
       return;
     }
     
-    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}`, {
+    const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/freelancers/${session.user.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ async function signUpWithEmail() {
 
     if (error) throw error;
 
-    await fetch('http://localhost:5050/api/users/sync-user', {
+    await fetch('https://hiresphere-m3fd.onrender.com/api/users/sync-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ async function signUpWithGoogle() {
 
     if (error) throw error;
 
-    await fetch('http://localhost:5050/api/sync-user', {
+    await fetch('https://hiresphere-m3fd.onrender.com/api/sync-user', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

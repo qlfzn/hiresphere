@@ -11,7 +11,7 @@ onMounted(async() => {
 
         if (session && session.user) {
             try {
-                const userResponse = await fetch(`http://localhost:5050/api/user/${session.user.id}`, {
+                const userResponse = await fetch(`https://hiresphere-m3fd.onrender.com/api/user/${session.user.id}`, {
                 headers: {
                     'Authorization': `Bearer ${session.access_token}`
                 }

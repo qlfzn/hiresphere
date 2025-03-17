@@ -21,7 +21,7 @@ onMounted(async () => {
     }
     
     // Check if user already has a resume
-    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}/resume`, {
+    const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/freelancers/${session.user.id}/resume`, {
       headers: {
         'Authorization': `Bearer ${session.access_token}`
       }
@@ -87,7 +87,7 @@ async function uploadResume() {
     formData.append('file', resumeFile.value);
 
     // Upload file with progress tracking using Fetch API
-    const response = await fetch(`http://localhost:5050/api/freelancers/${session.user.id}/resume/upload`, {
+    const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/freelancers/${session.user.id}/resume/upload`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${session.access_token}`

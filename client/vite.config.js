@@ -14,7 +14,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:5050'
+      '/api': 'https://hiresphere-m3fd.onrender.com'
     }
   },
   resolve: {

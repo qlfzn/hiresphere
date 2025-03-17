@@ -110,7 +110,7 @@ router.beforeEach(async (to, from, next) => {
       
       if (requiredRole) {
         try {
-          const response = await fetch(`http://localhost:5050/api/users/get-user/${session.user.id}`, {
+          const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/users/get-user/${session.user.id}`, {
             headers: {
               'Authorization': `Bearer ${session.access_token}`
             }

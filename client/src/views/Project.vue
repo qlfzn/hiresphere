@@ -81,7 +81,7 @@ onMounted(async () => {
             router.push('/auth/login');
             return;
         }
-        const response = await fetch(`http://localhost:5050/api/projects?user_id=${session.user.id}`, {
+        const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/projects?user_id=${session.user.id}`, {
             headers: {
                 'Authorization': `Bearer ${session.access_token}`
             }
