@@ -66,9 +66,9 @@ async function loginWithGoogle() {
       <div class="w-1/2 p-8">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">HireSphere</h1>
         <ul class="space-y-4 text-gray-700">
-          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✔</span> Get started quickly with easy steps.</li>
-          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✔</span> Native.</li>
-          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">✔</span> Join millions of businesses using Flowbite.</li>
+          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">🚀 </span>Get started effortlessly in just a few steps</li>
+          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">💼</span>Designed for seamless hiring and collaboration.</li>
+          <li class="flex items-start"><span class="text-blue-500 font-bold mr-2">🌎</span>Join a growing network of top businesses and professionals.</li>
         </ul>
       </div>
       
