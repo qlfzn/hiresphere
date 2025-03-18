@@ -16,11 +16,11 @@ defineProps({
 
 const router = useRouter();
 
-const routeToHomePage = () => {
-    router.push('/home');
+const routeToSignupPage = () => {
+    router.push('/auth/signup');
 }
 
-const routeToAuthPage = () => {
+const routeToLoginPage = () => {
     router.push('/auth/login');
 }
 
@@ -43,14 +43,14 @@ const routeToAuthPage = () => {
                 <!-- Get Started Button -->
                 <button class="px-6 py-3 bg-[#6eb7ff] text-[#16235b] font-semibold rounded-full 
                                shadow-lg hover:bg-[#2B4570] hover:text-white transition"
-                               @click="routeToHomePage">
+                               @click="routeToSignupPage">
                     Get Started
                 </button>
 
                 <!-- Log in Button -->
                 <button class="flex items-center px-6 py-3 border border-gray-300 text-white 
                                rounded-full shadow-md hover:bg-white hover:text-[#16235b] transition"
-                               @click="routeToAuthPage">
+                               @click="routeToLoginPage">
                     Log in
                     <ArrowRight class="ml-2" />
                 </button>
