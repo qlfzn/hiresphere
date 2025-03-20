@@ -46,7 +46,16 @@ onMounted(async () => {
       // Populate form with existing data
       Object.keys(freelancerProfile.value).forEach(key => {
         if (data[key] !== undefined) {
-          freelancerProfile.value[key] = data[key];
+              if (key === 'skills' && typeof data[key] === 'string') {
+            try {
+              freelancerProfile.value[key] = JSON.parse(data[key]);
+            } catch (e) {
+              // If parsing fails, default to empty array
+              freelancerProfile.value[key] = [];
+            }
+          } else {
+            freelancerProfile.value[key] = data[key];
+          }
         }
       });
 
@@ -82,7 +91,12 @@ async function saveProfile() {
       router.push('/auth/login');
       return;
     }
-    
+
+    const profileToSave = { ...freelancerProfile.value };
+    if (Array.isArray(profileToSave.skills)) {
+      profileToSave.skills = JSON.stringify(profileToSave.skills);
+    }
+
     const response = await fetch(`https://hiresphere-m3fd.onrender.com/api/freelancers/${session.user.id}`, {
       method: 'PUT',
       headers: {
