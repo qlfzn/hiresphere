@@ -56,7 +56,7 @@ const routes = [
         meta: { requiresAuth: true}
     },
     {
-        path: '/projects/:id/matches',
+        path: '/projects/matches/:id',
         name: 'profileMatch',
         component: ProfileMatch,
         meta: { requiresAuth: true}

@@ -95,19 +95,18 @@ async function getProjects(req, res, next) {
         });
         }
         
-        // Filter for active/inactive projects if specified
         let query = supabase
         .from('projects')
         .select(`
             id,
             title,
             description,
+            skills_required,
             working_mode,
             location,
             is_active,
             due_date,
             clients (company)
-
         `)
         .eq('client_id', clientData.id);
         
@@ -120,7 +119,6 @@ async function getProjects(req, res, next) {
         
         const { data, error } = await query;
 
-        
         if (error) {
         return res.status(400).json({
             success: false,
@@ -142,7 +140,7 @@ async function getProjects(req, res, next) {
 async function getProjectById(req, res, next) {
     try {
       const { id } = req.params;
-      const userId = req.query.id;
+      const userId = req.query.user_id;
       
       // Get client_id from the clients table
       const { data: clientData, error: clientError } = await supabase
@@ -162,7 +160,18 @@ async function getProjectById(req, res, next) {
       // Get the project
       const { data, error } = await supabase
         .from('projects')
-        .select('*')
+        .select(`
+            id,
+            title,
+            job_title,
+            description,
+            skills_required,
+            working_mode,
+            location,
+            is_active,
+            due_date,
+            clients (company)
+        `)
         .eq('id', id)
         .eq('client_id', clientData.id)
         .single();
@@ -323,8 +332,7 @@ async function deleteProject(req, res, next) {
       
       try {
         const aiResponse = await axios.post(aiServiceUrl, {
-          projectId: id,
-          projectDetails: project
+          projectId: id
         });
         
         // Store the matches in the database

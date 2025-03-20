@@ -8,7 +8,6 @@ const isMobileMenuOpen = ref(false);
 const isScrolled = ref(false);
 const route = useRoute();
 
-// Close mobile menu when clicking outside
 const handleClickOutside = (event) => {
   const nav = document.getElementById('mobile-menu-container');
   if (nav && !nav.contains(event.target) && !event.target.closest('button')) {
@@ -16,12 +15,10 @@ const handleClickOutside = (event) => {
   }
 };
 
-// Handle scroll effect
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 10;
 };
 
-// Close mobile menu when route changes
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false;
 };
@@ -133,7 +130,7 @@ onUnmounted(() => {
       <div class="max-h-[70vh] overflow-y-auto py-2">
         <RouterLink 
           v-for="(item, index) in [
-            { name: 'Dashboard', path: '/' },
+            { name: 'Dashboard', path: '/projects' },
             { name: 'Projects', path: '/projects' },
             { name: 'Profile', path: '/profile' }
           ]" 

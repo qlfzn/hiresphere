@@ -137,6 +137,7 @@ const submitFormValues = async () => {
         working_mode: preferences.value.mode,
         location: preferences.value.locationPreferences,
         budget: preferences.value.maxCompensation,
+        due_date: projectDetails.value.endDate,
         is_active: true
     };
 
